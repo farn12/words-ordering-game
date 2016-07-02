@@ -1,0 +1,43 @@
+#game-box{
+	width: 600px;
+	height: 600px;
+	border: 1px solid #ccc;
+}
+
+#timer{text-align: center;}
+
+#free-float-zone{
+	width: 100%;
+	height: 80%;
+	/*border: 1px solid #aaa;*/
+}
+
+#finish-line{
+	height: 40px;
+	width: 100%;
+	/*border: 1px solid #aaa;*/
+	/* float: left; */
+}
+
+#instruction{
+	text-align: center;
+	color: #ccc;
+	line-height: 40px;
+}
+
+
+#free-float-zone > .box {
+	position: absolute;
+}
+
+
+#finish-line > .box {
+	/* width: 100px; */
+	/* height: 100px; */
+	float: left;
+	margin-right: 5px;
+}
+
+.drag-enter {
+	border: 2px dashed #000;
+}
