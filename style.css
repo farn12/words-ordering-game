@@ -1,7 +1,8 @@
 #game-box{
-	width: 600px;
-	height: 600px;
+	width: 500px;
+	height: 500px;
 	border: 1px solid #ccc;
+	float: left;
 }
 
 #timer{text-align: center;}
@@ -28,6 +29,7 @@
 
 #free-float-zone > .box {
 	position: absolute;
+	cursor: move;
 }
 
 
@@ -38,6 +40,38 @@
 	margin-right: 5px;
 }
 
-.drag-enter {
-	border: 2px dashed #000;
+.drag-enter-correct {
+	/*border: 2px dashed #000;*/
+	background-color: #78c77a;
+}
+
+.drag-enter-incorrect {
+	/*border: 2px dashed #000;*/
+	background-color: #efa2a6;
+}
+
+
+#control-box{
+	float: left;
+}
+
+#start-btn{
+	background-color: #abc;
+	cursor: pointer;
+	cursor: hand;
+	margin: 20px;
+}
+
+.btn{
+	padding: 5px 10px;
+}
+
+#highscore-box{
+	border: 1px solid #ccc;
+	float: left;
+	text-align: center;
+}
+
+#highscore-box th,td{
+	padding: 5px 20px;
 }
