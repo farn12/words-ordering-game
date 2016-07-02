@@ -1,0 +1,6 @@
+packages
+.vs
+bin
+obj
+/WordsOrderingGame/Properties/PublishProfiles/*.pubxml
+/WordsOrderingGame/Properties/PublishProfiles/*.user
