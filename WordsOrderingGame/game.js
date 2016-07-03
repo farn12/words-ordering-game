@@ -108,13 +108,13 @@ function LeaderBoard() {
 function WordsGame() {
 	var words = ["It's", "all", "about", "the", "flow"]; // The list and order of words for the game
 
-	var timer = new Timer(timerEl);
-	var leaderBoard = new LeaderBoard();
-	var xhr = new Xhr();
-	
 	var freeFloatZone = document.getElementById('free-float-zone');
 	var finishLine = document.getElementById('finish-line');
 	var timerEl = document.getElementById('timer');
+
+	var timer = new Timer(timerEl);
+	var leaderBoard = new LeaderBoard();
+	var xhr = new Xhr();
 
 	var arrangedWords = [];
 	var beingDraggedEl = null;
@@ -125,6 +125,7 @@ function WordsGame() {
 	}
 
 	function handleDragStart(e) {
+	    e.dataTransfer.setData('Text', e.target.id);
 	    beingDraggedEl = e.target;
 	}
 
@@ -161,21 +162,24 @@ function WordsGame() {
 
 			// finish game if all words are arranged correctly
 			if (arrangedWords.length == words.length) {
-				stopGame();
-				var name;
-				while (!name) {
-				    name = prompt("Please enter your name"); // enter name to save
-				}
+			    stopGame();
+                    
+			    setTimeout(function () { 
+				    var name;
+				    while (!name) {
+				        name = prompt("Please enter your name"); // enter name to save
+				    }
 			    
-				// submit player and score to the server
-				xhr.post('/api/scores', {
-				    name: name,
-				    timeInSecond: timer.getCurrentValue()
-				}, function (result) {
-				    var score = JSON.parse(result.response);
-				    console.log("submitted", score);
-				    leaderBoard.refresh(); // refresh leaderboard
-				});
+				    // submit player and score to the server
+				    xhr.post('/api/scores', {
+				        name: name,
+				        timeInSecond: timer.getCurrentValue()
+				    }, function (result) {
+				        var score = JSON.parse(result.response);
+				        console.log("submitted", score);
+				        leaderBoard.refresh(); // refresh leaderboard
+				    });
+			    }, 0);
 			}
 		} else {
 			return;

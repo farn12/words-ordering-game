@@ -4,3 +4,4 @@ bin
 obj
 /WordsOrderingGame/Properties/PublishProfiles/*.pubxml
 /WordsOrderingGame/Properties/PublishProfiles/*.user
+/WordsOrderingGame/App_Data/scores.json

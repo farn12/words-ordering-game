@@ -21,8 +21,12 @@ namespace WordsOrderingGame.Controllers
         public ScoresController()
         {
         }
-
-        // GET: api/Scores
+        
+        /// <summary>
+        /// Load top 10 scores
+        /// GET: api/Scores
+        /// </summary>
+        /// <returns></returns>
         public async Task<IHttpActionResult> Get()
         {
             try
@@ -36,8 +40,13 @@ namespace WordsOrderingGame.Controllers
                 return BadRequest(ex.ToString());
             }
         }
-        
-        // POST: api/Scores
+
+        /// <summary>
+        /// Submit new score and return saved score with its rank
+        /// POST: api/Scores
+        /// </summary>
+        /// <param name="score"></param>
+        /// <returns></returns>
         public async Task<IHttpActionResult> Post([FromBody]Score score)
         {
             if (!ModelState.IsValid)
@@ -66,6 +75,11 @@ namespace WordsOrderingGame.Controllers
             return Ok(score);
         }
 
+        /// <summary>
+        /// read scores from scores.json file into objects
+        /// if the file or directory does not exists, create it
+        /// </summary>
+        /// <returns></returns>
         private IList<Score> readScores()
         {
             IList<Score> scores = new List<Score>();
