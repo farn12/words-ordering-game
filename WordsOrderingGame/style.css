@@ -5,19 +5,25 @@
 	float: left;
 }
 
-#timer{text-align: center;}
+#timer{
+    text-align: center;
+    margin: 20px 0;
+    color: #a5a5a5;
+}
 
 #free-float-zone{
 	width: 100%;
-	height: 80%;
+	height: 340px;
 	/*border: 1px solid #aaa;*/
 }
 
 #finish-line{
 	height: 40px;
-	width: 100%;
-	/*border: 1px solid #aaa;*/
-	/* float: left; */
+    border-bottom: 1px solid #aaa;
+    margin: 0 100px;
+    padding: 0 10px;
+    line-height: 55px;
+    font-size: 1.5em;
 }
 
 #instruction{
@@ -30,6 +36,7 @@
 #free-float-zone > .box {
 	position: absolute;
 	cursor: move;
+    font-size: 1.5em;
 }
 
 
@@ -56,10 +63,10 @@
 }
 
 #start-btn{
-	background-color: #abc;
-	cursor: pointer;
-	cursor: hand;
-	margin: 20px;
+	background-color: #1d80e2;
+    cursor: pointer;
+    margin: 20px;
+    color: #fff;
 }
 
 .btn{
@@ -74,4 +81,12 @@
 
 #highscore-box th,td{
 	padding: 5px 20px;
+}
+
+.text{
+    text-align: left;
+}
+
+.number{
+    text-align: right;
 }
