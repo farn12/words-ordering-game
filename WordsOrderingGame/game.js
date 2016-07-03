@@ -1,7 +1,9 @@
+// Timer stop watch
 function Timer(timeDisplay) {
 	var secondsLasted = 0;
 	var intervalHandle;
 
+	// convert seconds to m:ss format
 	function convertSecondsToTime(seconds) {
 	    // turn the seconds into mm:ss
 	    var min = Math.floor(seconds / 60);
@@ -17,43 +19,53 @@ function Timer(timeDisplay) {
 	    return message;
 	}
 
+	// show time on DOM
 	function displayTime() {
 	    timeDisplay.innerHTML = convertSecondsToTime(secondsLasted);
 	}
 
+	// clock tick
 	function tick() {
 		secondsLasted++;
 		displayTime();
 	}
 
 	return {
+		// start timer
 		start: function () {
 			this.reset();
 			intervalHandle = setInterval(tick, 1000);
 		},
+		// stop timer
 		stop: function () {
 			clearInterval(intervalHandle);
 		},
+		// reset timer
 		reset: function () {
 			this.stop();
 			secondsLasted = 0;
 			displayTime();
 		},
+		// get current value of timer in second
 		getCurrentValue: function () {
 			return secondsLasted;
 		},
+		// convert seconds to m:ss format
 		convertSecondsToTime: convertSecondsToTime
 	}
 }
 
+// LeaderBoard to show high scores
 function LeaderBoard() {
     var scores = [];
+
     var timer = new Timer();
     var xhr = new Xhr();
 
     var highscoreTable = document.getElementById('s-tbl');
     var highscoreTableBody = document.getElementById('hs-tbl-body');
 
+	// display scores to the leader board
     function displayScores() {
         highscoreTableBody.innerHTML = '';
         for (var i = 0; i < scores.length; i++) {
@@ -81,6 +93,7 @@ function LeaderBoard() {
     }
 
     return {
+		// reload data of high scores from server and display to screen
         refresh: function () {
             xhr.get('/api/scores', function (xhr) {
                 scores = JSON.parse(xhr.response);
@@ -91,17 +104,22 @@ function LeaderBoard() {
     };
 }
 
+// The game play
 function WordsGame() {
-	var words = ["It's", "all", "about", "the", "flow"];
-	var arrangedWords = [];
+	var words = ["It's", "all", "about", "the", "flow"]; // The list and order of words for the game
+
+	var timer = new Timer(timerEl);
+	var leaderBoard = new LeaderBoard();
+	var xhr = new Xhr();
+	
 	var freeFloatZone = document.getElementById('free-float-zone');
 	var finishLine = document.getElementById('finish-line');
 	var timerEl = document.getElementById('timer');
-	var timer = new Timer(timerEl);
-	var leaderBoard = new LeaderBoard();
-	var beingDraggedEl = null;
-	var xhr = new Xhr();
 
+	var arrangedWords = [];
+	var beingDraggedEl = null;
+
+	// Generate random integer within a range
 	function getRandomInt(min, max) {
 		return Math.floor(Math.random() * (max - min)) + min;
 	}
@@ -114,6 +132,7 @@ function WordsGame() {
 	    var text = beingDraggedEl.innerHTML;
 
 		if (e.type == "dragenter") {
+			// check if correct word or not when dragging enter
 			if(checkNextWord(text)){
 				this.className = "drag-enter-correct";
 			}else{
@@ -140,21 +159,22 @@ function WordsGame() {
 			beingDraggedEl.parentNode.removeChild(beingDraggedEl);
 			finishLine.innerHTML += text + " ";
 
+			// finish game if all words are arranged correctly
 			if (arrangedWords.length == words.length) {
 				stopGame();
 				var name;
 				while (!name) {
-				    name = prompt("Please enter your name");
+				    name = prompt("Please enter your name"); // enter name to save
 				}
-			    //alert('Congratulation ' + name + '! Your time is ' + timer.getCurrentValue() + ' seconds.')
+			    
+				// submit player and score to the server
 				xhr.post('/api/scores', {
 				    name: name,
 				    timeInSecond: timer.getCurrentValue()
 				}, function (result) {
 				    var score = JSON.parse(result.response);
 				    console.log("submitted", score);
-				    stopGame();
-				    leaderBoard.refresh();
+				    leaderBoard.refresh(); // refresh leaderboard
 				});
 			}
 		} else {
@@ -162,6 +182,7 @@ function WordsGame() {
 		}
 	}
 
+	// check if next word is correct
 	function checkNextWord(word){
 		var index = arrangedWords.length;
 		return words[index] == word;
@@ -172,6 +193,7 @@ function WordsGame() {
 	}
 
 	return {
+		// start playing
 		start: function () {
 			this.reset();
 			timer.start();
@@ -184,6 +206,7 @@ function WordsGame() {
 			    }
 			}
 
+			// check if the new word display position is overlap with a current word
 			function checkOverlap(coordinate) {
 			    for (var i = 0; i < displayedObjects.length; i++) {
 			        var displayedCoordinate = displayedObjects[i];
@@ -218,13 +241,9 @@ function WordsGame() {
 				el.style.top = coordinate.x + "px";
 				el.style.left = coordinate.y + "px";
 
+				el.addEventListener("dragstart", handleDragStart);
+
 				freeFloatZone.appendChild(el);
-			}
-
-			var draggable = document.querySelectorAll('[draggable]');
-
-			for (var i = 0; i < draggable.length; i++) {
-				draggable[i].addEventListener("dragstart", handleDragStart);
 			}
 
 			finishLine.addEventListener("dragover", handleOverDrop);
@@ -232,9 +251,11 @@ function WordsGame() {
 			finishLine.addEventListener("dragenter", handleDragEnterLeave);
 			finishLine.addEventListener("dragleave", handleDragEnterLeave);
 		},
+		// stop game
 		stop: function(){
 			stopGame();
 		},
+		// reset game
 		reset: function () {
 			this.stop();
 			arrangedWords = [];
